@@ -1,0 +1,331 @@
+openapi: 3.0.1
+info:
+  title: Chat Message Integration API
+  version: 1.0.0
+paths:
+  /public/v1/chat.message.send:
+    post:
+      tags:
+        - chat-message
+      operationId: sendChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendChatMessagePublicV1Request'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendChatMessagePublicV1Response'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+  /public/v1/chat.message.edit:
+    post:
+      tags:
+        - chat-message
+      operationId: editChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditChatMessagePublicV1Request'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EditChatMessagePublicV1Response'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+  /public/v1/chat.message.delete:
+    post:
+      tags:
+        - chat-message
+      operationId: deleteChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteChatMessagePublicV1Request'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteChatMessagePublicV1Response'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+  /public/v1/chat.message.forward:
+    post:
+      tags:
+        - chat-message
+      operationId: forwardChatMessage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForwardChatMessagePublicV1Request'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForwardChatMessagePublicV1Response'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+  /public/v1/chat.create:
+    post:
+      tags:
+        - chat-message
+      operationId: createChat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateChatPublicV1Request'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateChatPublicV1Response'
+        "401":
+          $ref: '#/components/responses/UnauthorizedError'
+  /public/v1/bot.getUpdates:
+    get:
+      operationId: getUpdates
+      tags:
+        - chat-message
+      parameters:
+        - name: offset
+          in: query
+          description: Identifier of the first update to be returned.
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          description: Limits the number of updates to be retrieved. Defaults to 100.
+          required: false
+          schema:
+            type: integer
+            default: 100
+        - name: timeout
+          in: query
+          description: Timeout in seconds for long polling. Defaults to 0.
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: subscribeToChat 200 response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Update'
+components:
+  schemas:
+    ChatId:
+      type: string
+      format: string-id
+    ChatMessageId:
+      type: string
+      format: flake-id
+    WorkspaceId:
+      type: string
+      format: flake-id
+    AccountId:
+      type: string
+      format: flake-id
+    SendChatMessagePublicV1Request:
+      type: object
+      required:
+        - workspaceId
+        - chatId
+        - markdown
+      properties:
+        workspaceId:
+          $ref: '#/components/schemas/WorkspaceId'
+        chatId:
+          $ref: '#/components/schemas/ChatId'
+        markdown:
+          type: string
+        replyTo:
+          $ref: '#/components/schemas/ChatMessageId'
+    SendChatMessagePublicV1Response:
+      type: object
+      required:
+        - messageId
+      properties:
+        messageId:
+          $ref: '#/components/schemas/ChatMessageId'
+    EditChatMessagePublicV1Request:
+      type: object
+      required:
+        - workspaceId
+        - chatId
+        - chatMessageId
+        - newMarkdown
+      properties:
+        workspaceId:
+          $ref: '#/components/schemas/WorkspaceId'
+        chatMessageId:
+          $ref: '#/components/schemas/ChatMessageId'
+        chatId:
+          $ref: '#/components/schemas/ChatId'
+        newMarkdown:
+          type: string
+    EditChatMessagePublicV1Response:
+      type: object
+      required:
+        - updatedAt
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
+    DeleteChatMessagePublicV1Request:
+      type: object
+      required:
+        - workspaceId
+        - chatId
+        - chatMessageId
+      properties:
+        workspaceId:
+          $ref: '#/components/schemas/WorkspaceId'
+        chatId:
+          $ref: '#/components/schemas/ChatId'
+        chatMessageId:
+          $ref: '#/components/schemas/ChatMessageId'
+    DeleteChatMessagePublicV1Response:
+      type: object
+      required:
+        - updatedAt
+      properties:
+        updatedAt:
+          type: string
+          format: date-time
+    ForwardChatMessagePublicV1Request:
+      type: object
+      required:
+        - workspaceId
+        - sourceChatId
+        - sourceChatMessageId
+        - targetChatId
+        - markdown
+      properties:
+        workspaceId:
+          $ref: '#/components/schemas/WorkspaceId'
+        sourceChatId:
+          $ref: '#/components/schemas/ChatId'
+        sourceChatMessageId:
+          $ref: '#/components/schemas/ChatMessageId'
+        targetChatId:
+          $ref: '#/components/schemas/ChatId'
+        markdown:
+          type: string
+    ForwardChatMessagePublicV1Response:
+      type: object
+      required:
+        - forwardedMessageId
+      properties:
+        messageId:
+          $ref: '#/components/schemas/ChatMessageId'
+    CreateChatPublicV1Request:
+      type: object
+      required:
+        - workspaceId
+        - chatType
+      properties:
+        workspaceId:
+          $ref: '#/components/schemas/WorkspaceId'
+        chatType:
+          $ref: '#/components/schemas/ChatType'
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountId'
+    CreateChatPublicV1Response:
+      type: object
+      required:
+        - chatId
+      properties:
+        chatId:
+          $ref: '#/components/schemas/ChatId'
+    ChatType:
+      enum:
+        - PERSONAL
+    NewChatMessage:
+      required:
+        - workspaceId
+        - chatId
+        - messageId
+        - markdown
+        - author
+      type: object
+      properties:
+        workspaceId:
+          $ref: '#/components/schemas/WorkspaceId'
+        chatId:
+          $ref: '#/components/schemas/ChatId'
+        messageId:
+          $ref: '#/components/schemas/ChatMessageId'
+        author:
+          $ref: '#/components/schemas/AccountId'
+        parentMessageId:
+          $ref: '#/components/schemas/ChatMessageId'
+        parentMessageAuthor:
+          $ref: '#/components/schemas/AccountId'
+        markdown:
+          type: string
+    InviteToChat:
+      required:
+        - workspaceId
+        - chatId
+        - inviter
+      type: object
+      properties:
+        workspaceId:
+          $ref: '#/components/schemas/WorkspaceId'
+        chatId:
+          $ref: '#/components/schemas/ChatId'
+        inviter:
+          $ref: '#/components/schemas/AccountId'
+    Update:
+      type: object
+      required:
+        - updateId
+      properties:
+        updateId:
+          type: integer
+          format: int64
+        newChatMessage:
+          $ref: '#/components/schemas/NewChatMessage'
+        inviteToChat:
+          $ref: '#/components/schemas/InviteToChat'
+
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: [ ]
