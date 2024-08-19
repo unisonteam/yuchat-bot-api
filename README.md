@@ -17,9 +17,9 @@ cd bot-api-demo.git
 
 Open API спецификация для работы с YuChat Bot API находится в файле [`openapi.yaml`](spec/openapi.yaml). 
 HTTP клиет для работы с API генерируется автоматически при сборке проекта. Пример работы с клиентом находится в 
-[YuchatHttpClient](app/src/main/java/ai/yuchat/bot/client/YuchatHttpClient.java).
+[YuchatHttpClient](app/src/main/java/ai/yuchat/bot/examples/client/YuchatHttpClient.java).
 
-Конфигурация приложения находится в файле [application.yml](app/src/main/resources/application.yml).
+Конфигурация приложения находится в файле [application.yml](app/src/main/resources/application.yaml).
 
 
 
