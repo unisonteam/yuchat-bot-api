@@ -7,8 +7,8 @@
 
 ## Быстрый старт
 ```bash
-git clone git@github.com:unison-messenger/bot-api-demo.git
-cd bot-api-demo.git
+git clone git@github.com:unisonteam/yuchat-bot-api.git
+cd yuchat-bot-api.git
 ./gradlew clean build
 ./gradlew bootRun
 ```
